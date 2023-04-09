@@ -1,5 +1,6 @@
 from util import *
 
+
 class HomeScreen(QMainWindow):
     def __init__(self):
         super(HomeScreen, self).__init__()
@@ -35,16 +36,15 @@ class HomeScreen(QMainWindow):
         self.generateBtn.clicked.connect(self.generateGraph)
         self.clearBtn.clicked.connect(self.clear)
 
-
     def generateGraph(self):
         self.NFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
 
-        self.NFA.add_edge('q0','q0', label='0')
-        self.NFA.add_edge('q0','q1', label='0,1')
-        self.NFA.add_edge('q1','q0', label='1')
-        self.NFA.add_edge('q1','q1', label='1')
+        self.NFA.add_edge('q0', 'q0', label='0')
+        self.NFA.add_edge('q0', 'q1', label='0,1')
+        self.NFA.add_edge('q1', 'q0', label='1')
+        self.NFA.add_edge('q1', 'q1', label='1')
 
         # self.NFA.add_edge('q0','q0', label='0')
         # self.NFA.add_edge('q0','q1', label='1')
@@ -66,47 +66,44 @@ class HomeScreen(QMainWindow):
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
 
-
     def clear(self):
         self.NFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
-    
 
     def plot(self, imgName, graph_viz, layout, label):
         self.layout = layout
         self.layout.addWidget(label, alignment=Qt.AlignCenter)
         graph_viz.format = 'png'
-        graph_viz.render(imgName, view = False)
-        aspectResize(imgName+'.png', self.NFA_Widget.width(), self.NFA_Widget.height())
+        graph_viz.render(imgName, view=False)
+        aspectResize(imgName+'.png', self.NFA_Widget.width(),
+                     self.NFA_Widget.height())
         pixmap = QPixmap(imgName+'.png')
         label.setPixmap(pixmap)
-
 
     def fromNXtoGV(self, graph, graph_viz):
         labels = nx.get_edge_attributes(graph, 'label')
         isInitialSet = False
         for edge in graph.edges:
-            if(graph.nodes[edge[0]]['final']):
+            if (graph.nodes[edge[0]]['final']):
                 graph_viz.node(edge[0], shape='doublecircle')
             else:
                 graph_viz.node(edge[0], shape='circle')
-            if(graph.nodes[edge[1]]['final']):
+            if (graph.nodes[edge[1]]['final']):
                 graph_viz.node(edge[1], shape='doublecircle')
             else:
                 graph_viz.node(edge[1], shape='circle')
-            
-            if(not isInitialSet and graph.nodes[edge[0]]['initial']):
+
+            if (not isInitialSet and graph.nodes[edge[0]]['initial']):
                 isInitialSet = True
                 graph_viz.edge('', edge[0])
-            if(not isInitialSet and graph.nodes[edge[1]]['initial']):
+            if (not isInitialSet and graph.nodes[edge[1]]['initial']):
                 isInitialSet = True
                 graph_viz.edge('', edge[1])
-            
-            graph_viz.edge(edge[0], edge[1], label=labels[edge])
 
+            graph_viz.edge(edge[0], edge[1], label=labels[edge])
 
     def addEdge(self):
         fromNode = self.fromNodeTxt.text()
@@ -117,23 +114,23 @@ class HomeScreen(QMainWindow):
         self.toNodeTxt.setText('')
         self.edgeLabelTxt.setText('')
 
-        if(fromNode!='' and toNode!=''):
+        if (fromNode != '' and toNode != ''):
             self.NFA.add_edge(fromNode, toNode, label=edgeLbl)
 
-        if(self.fromIsFinal.isChecked()):
+        if (self.fromIsFinal.isChecked()):
             self.NFA.nodes[fromNode]['final'] = True
         else:
             self.NFA.nodes[fromNode]['final'] = False
-        if(self.fromIsInitial.isChecked()):
+        if (self.fromIsInitial.isChecked()):
             self.NFA.nodes[fromNode]['initial'] = True
         else:
             self.NFA.nodes[fromNode]['initial'] = False
 
-        if(self.toIsFinal.isChecked()):
+        if (self.toIsFinal.isChecked()):
             self.NFA.nodes[toNode]['final'] = True
         else:
             self.NFA.nodes[toNode]['final'] = False
-        if(self.toIsInitial.isChecked()):
+        if (self.toIsInitial.isChecked()):
             self.NFA.nodes[toNode]['initial'] = True
         else:
             self.NFA.nodes[toNode]['initial'] = False
@@ -142,7 +139,6 @@ class HomeScreen(QMainWindow):
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
-    
 
     def markInitialAndFinal(self, initial):
         for nodeStr in self.DFA.nodes:
@@ -162,7 +158,6 @@ class HomeScreen(QMainWindow):
                     self.DFA.nodes[nodeStr]['final'] = True
                     break
 
-
     def getNextNodeSet(self, nodeList, alpha, isEpsilonNFA):
         nextNodeSet = set()
         for node in nodeList:
@@ -172,10 +167,10 @@ class HomeScreen(QMainWindow):
                     if self.NFA.nodes[dstNode]['final'] == True:
                         self.NFA.nodes[node]['final'] = True
                 if len(epsDstNodes) != 0:
-                    nextNodeSet = nextNodeSet.union(self.getNextNodeSet(list(epsDstNodes), alpha, isEpsilonNFA))
+                    nextNodeSet = nextNodeSet.union(self.getNextNodeSet(
+                        list(epsDstNodes), alpha, isEpsilonNFA))
             nextNodeSet = nextNodeSet.union(self.NFA.nodes[node][alpha])
         return nextNodeSet
-
 
     def addTransitionTuple(self, alphabet, nodeList, visited, nodePattern):
         if nodeList[0] == 'rej':
@@ -184,7 +179,8 @@ class HomeScreen(QMainWindow):
             # form the next node set
             if alpha == 'eps':
                 continue
-            nextNodeSet = self.getNextNodeSet(nodeList, alpha, 'eps' in alphabet)
+            nextNodeSet = self.getNextNodeSet(
+                nodeList, alpha, 'eps' in alphabet)
 
             # form the next node list
             nextNodeList = []
@@ -206,8 +202,8 @@ class HomeScreen(QMainWindow):
             # check if a node is visited
             if nextNodeList not in visited:
                 visited.append(nextNodeList)
-                self.addTransitionTuple(alphabet, nextNodeList, visited, nodePattern)
-
+                self.addTransitionTuple(
+                    alphabet, nextNodeList, visited, nodePattern)
 
     def convert(self):
         edge_labels = nx.get_edge_attributes(self.NFA, 'label')
@@ -225,7 +221,7 @@ class HomeScreen(QMainWindow):
         for node in self.NFA.nodes:
             nodePattern.append(node)
             for alph in alphabet:
-                    self.NFA.nodes[node][alph] = set()
+                self.NFA.nodes[node][alph] = set()
 
         # form an NFA transition table
         initialNode = None
@@ -260,11 +256,13 @@ class HomeScreen(QMainWindow):
             else:
                 for toNode in self.DFA.nodes[fromNode]:
                     if toNode != 'initial' and toNode != 'final':
-                        self.DFA.add_edge(fromNode, toNode, label=",".join(self.DFA.nodes[fromNode][toNode]))
+                        self.DFA.add_edge(fromNode, toNode, label=",".join(
+                            self.DFA.nodes[fromNode][toNode]))
 
         # display the DFA
         self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
+
 
 app = QApplication(sys.argv)
 home = HomeScreen()

@@ -1,0 +1,4 @@
+pydot
+graphviz
+pyqt5
+networkx
