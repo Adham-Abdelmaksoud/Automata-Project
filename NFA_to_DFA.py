@@ -163,14 +163,28 @@ class HomeScreen(QMainWindow):
                     break
 
 
+    def getNextNodeSet(self, nodeList, alpha, isEpsilonNFA):
+        nextNodeSet = set()
+        for node in nodeList:
+            if isEpsilonNFA:
+                epsDstNodes = self.NFA.nodes[node]['eps']
+                for dstNode in list(epsDstNodes):
+                    if self.NFA.nodes[dstNode]['final'] == True:
+                        self.NFA.nodes[node]['final'] = True
+                if len(epsDstNodes) != 0:
+                    nextNodeSet = nextNodeSet.union(self.getNextNodeSet(list(epsDstNodes), alpha, isEpsilonNFA))
+            nextNodeSet = nextNodeSet.union(self.NFA.nodes[node][alpha])
+        return nextNodeSet
+
+
     def addTransitionTuple(self, alphabet, nodeList, visited, nodePattern):
         if nodeList[0] == 'rej':
             return
         for alpha in alphabet:
             # form the next node set
-            nextNodeSet = set()
-            for node in nodeList:
-                nextNodeSet = nextNodeSet.union(self.NFA.nodes[node][alpha])
+            if alpha == 'eps':
+                continue
+            nextNodeSet = self.getNextNodeSet(nodeList, alpha, 'eps' in alphabet)
 
             # form the next node list
             nextNodeList = []
@@ -238,6 +252,8 @@ class HomeScreen(QMainWindow):
         self.markInitialAndFinal(initialNode)
 
         # add the DFA edges
+        if 'eps' in alphabet:
+            alphabet.remove('eps')
         for fromNode in self.DFA.nodes:
             if fromNode == 'rej':
                 self.DFA.add_edge('rej', 'rej', label=",".join(alphabet))
