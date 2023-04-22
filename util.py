@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import sys
+from random import random
 
 import graphviz as gv
 from matplotlib import image

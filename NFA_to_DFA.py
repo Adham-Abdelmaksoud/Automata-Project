@@ -6,6 +6,8 @@ class HomeScreen(QMainWindow):
         super(HomeScreen, self).__init__()
         uic.loadUi('NFA_to_DFA.ui', self)
 
+        self.lastRand = 0
+
         self.NFA_Widget = self.findChild(QWidget, 'NFA_Widget')
         self.DFA_Widget = self.findChild(QWidget, 'DFA_Widget')
         self.fromNodeTxt = self.findChild(QLineEdit, 'fromNodeTxt')
@@ -37,31 +39,86 @@ class HomeScreen(QMainWindow):
         self.clearBtn.clicked.connect(self.clear)
 
     def generateGraph(self):
-        self.NFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
 
-        self.NFA.add_edge('q0', 'q0', label='0')
-        self.NFA.add_edge('q0', 'q1', label='0,1')
-        self.NFA.add_edge('q1', 'q0', label='1')
-        self.NFA.add_edge('q1', 'q1', label='1')
+        graph1 = nx.DiGraph()
+        graph1.add_edge('q0','q0', label='0')
+        graph1.add_edge('q0','q1', label='0,1')
+        graph1.add_edge('q1','q0', label='1')
+        graph1.add_edge('q1','q1', label='1')
+        for node in graph1.nodes:
+            graph1.nodes[node]['initial'] = False
+            graph1.nodes[node]['final'] = False
+        graph1.nodes['q0']['initial'] = True
+        graph1.nodes['q1']['final'] = True
 
-        # self.NFA.add_edge('q0','q0', label='0')
-        # self.NFA.add_edge('q0','q1', label='1')
-        # self.NFA.add_edge('q1','q1', label='0,1')
-        # self.NFA.add_edge('q1','q2', label='0')
-        # self.NFA.add_edge('q2','q1', label='1')
-        # self.NFA.add_edge('q2','q2', label='0,1')
+        graph2 = nx.DiGraph()
+        graph2.add_edge('q0','q0', label='0')
+        graph2.add_edge('q0','q1', label='1')
+        graph2.add_edge('q1','q1', label='0,1')
+        graph2.add_edge('q1','q2', label='0')
+        graph2.add_edge('q2','q1', label='1')
+        graph2.add_edge('q2','q2', label='0,1')
+        for node in graph2.nodes:
+            graph2.nodes[node]['initial'] = False
+            graph2.nodes[node]['final'] = False
+        graph2.nodes['q0']['initial'] = True
+        graph2.nodes['q2']['final'] = True
 
-        for node in self.NFA.nodes:
-            self.NFA.nodes[node]['initial'] = False
-            self.NFA.nodes[node]['final'] = False
+        graph3 = nx.DiGraph()
+        graph3.add_edge('1','2', label='eps')
+        graph3.add_edge('1','4', label='eps')
+        graph3.add_edge('2','3', label='a')
+        graph3.add_edge('3','2', label='eps')
+        graph3.add_edge('3','4', label='eps')
+        graph3.add_edge('4','5', label='eps')
+        graph3.add_edge('4','6', label='eps')
+        graph3.add_edge('5','7', label='a')
+        graph3.add_edge('6','8', label='b')
+        graph3.add_edge('7','9', label='eps')
+        graph3.add_edge('8','9', label='eps')
+        for node in graph3.nodes:
+            graph3.nodes[node]['initial'] = False
+            graph3.nodes[node]['final'] = False
+        graph3.nodes['1']['initial'] = True
+        graph3.nodes['9']['final'] = True
 
-        self.NFA.nodes['q0']['initial'] = True
-        self.NFA.nodes['q1']['final'] = True
+        graph4 = nx.DiGraph()
+        graph4.add_edge('1','2', label='eps')
+        graph4.add_edge('1','3', label='eps')
+        graph4.add_edge('1','4', label='eps')
+        graph4.add_edge('2','5', label='a')
+        graph4.add_edge('3','6', label='b')
+        graph4.add_edge('4','7', label='a')
+        graph4.add_edge('7','8', label='b')
+        graph4.add_edge('5','9', label='eps')
+        graph4.add_edge('6','9', label='eps')
+        graph4.add_edge('8','9', label='eps')
+        for node in graph4.nodes:
+            graph4.nodes[node]['initial'] = False
+            graph4.nodes[node]['final'] = False
+        graph4.nodes['1']['initial'] = True
+        graph4.nodes['9']['final'] = True
 
-        # self.NFA.nodes['q0']['initial'] = True
-        # self.NFA.nodes['q2']['final'] = True
+        graph5 = nx.DiGraph()
+        graph5.add_edge('q0','q1', label='1')
+        graph5.add_edge('q0','q2', label='eps')
+        graph5.add_edge('q1','q0', label='0')
+        graph5.add_edge('q1','q2', label='0,1')
+        for node in graph5.nodes:
+            graph5.nodes[node]['initial'] = False
+            graph5.nodes[node]['final'] = False
+        graph5.nodes['q0']['initial'] = True
+        graph5.nodes['q0']['final'] = True
+
+
+        graphs = [graph1, graph2, graph3, graph4, graph5]
+        rand = int(random()*len(graphs))
+        while rand == self.lastRand:
+            rand = int(random()*len(graphs))
+        self.lastRand = rand
+        self.NFA = graphs[rand]
 
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
@@ -195,9 +252,9 @@ class HomeScreen(QMainWindow):
             # add nodes to DFA
             self.DFA.add_nodes_from([nodeStr, nextNodeStr])
             if nextNodeStr in self.DFA.nodes[nodeStr].keys():
-                self.DFA.nodes[nodeStr][nextNodeStr].append(alpha)
+                self.DFA.nodes[nodeStr][nextNodeStr].add(alpha)
             else:
-                self.DFA.nodes[nodeStr][nextNodeStr] = [alpha]
+                self.DFA.nodes[nodeStr][nextNodeStr] = {alpha}
 
             # check if a node is visited
             if nextNodeList not in visited:
@@ -257,7 +314,7 @@ class HomeScreen(QMainWindow):
                 for toNode in self.DFA.nodes[fromNode]:
                     if toNode != 'initial' and toNode != 'final':
                         self.DFA.add_edge(fromNode, toNode, label=",".join(
-                            self.DFA.nodes[fromNode][toNode]))
+                            list(self.DFA.nodes[fromNode][toNode])))
 
         # display the DFA
         self.fromNXtoGV(self.DFA, self.DFA_viz)
