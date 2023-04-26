@@ -429,7 +429,7 @@ border-style: inset;
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="error_empty_fields">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -456,7 +456,7 @@ border-style: inset;
 }</string>
     </property>
     <property name="text">
-     <string>Please fill the empty fields</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="star_from_node">
@@ -485,7 +485,7 @@ border-style: inset;
 }</string>
     </property>
     <property name="text">
-     <string>*</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="star_to_node">
@@ -514,7 +514,7 @@ border-style: inset;
 }</string>
     </property>
     <property name="text">
-     <string>*</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="star_transition_edge">
@@ -543,40 +543,7 @@ border-style: inset;
 }</string>
     </property>
     <property name="text">
-     <string>*</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_error_convert">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>820</y>
-      <width>261</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>MS Shell Dlg 2</family>
-      <pointsize>11</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel{
-
-	font: 11pt &quot;MS Shell Dlg 2&quot;;
-	margin-right: 3px;
-	color: rgb(255, 0, 0);
-}</string>
-    </property>
-    <property name="text">
      <string/>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
     </property>
    </widget>
    <zorder>line</zorder>
@@ -589,11 +556,10 @@ border-style: inset;
    <zorder>label_6</zorder>
    <zorder>generateGraphBtn</zorder>
    <zorder>label_7</zorder>
-   <zorder>label_8</zorder>
+   <zorder>error_empty_fields</zorder>
    <zorder>star_from_node</zorder>
    <zorder>star_to_node</zorder>
    <zorder>star_transition_edge</zorder>
-   <zorder>label_error_convert</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
