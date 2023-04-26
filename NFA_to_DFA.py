@@ -1,11 +1,10 @@
 from util import *
 
-
 class HomeScreen(QMainWindow):
     def __init__(self):
         super(HomeScreen, self).__init__()
-        uic.loadUi('NFA_to_DFA.ui', self)
-
+        uic.loadUi('edited_NFA_to_DFA.ui', self)
+        self.show()
         self.lastRand = 0
 
         self.NFA_Widget = self.findChild(QWidget, 'NFA_Widget')
@@ -129,6 +128,14 @@ class HomeScreen(QMainWindow):
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
+        
+        ## Engy: I made the clear button clears both graphs ## 
+        self.DFA = nx.DiGraph()
+        self.DFA_viz = gv.Digraph()
+        self.DFA_viz.node('', shape='none')
+        self.fromNXtoGV(self.DFA, self.DFA_viz)
+        self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
+        ## ##
 
     def plot(self, imgName, graph_viz, layout, label):
         self.layout = layout
@@ -321,7 +328,3 @@ class HomeScreen(QMainWindow):
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
 
 
-app = QApplication(sys.argv)
-home = HomeScreen()
-home.show()
-app.exit(app.exec_())
