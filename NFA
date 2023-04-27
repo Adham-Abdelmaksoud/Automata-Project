@@ -1,7 +1,3 @@
 digraph {
 	"" [shape=none]
-	a [shape=circle]
-	b [shape=circle]
-	"" -> a
-	a -> b [label=0]
 }
