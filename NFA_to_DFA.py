@@ -172,8 +172,10 @@ class HomeScreen(QMainWindow):
             if (not isInitialSet and graph.nodes[edge[1]]['initial']):
                 isInitialSet = True
                 graph_viz.edge('', edge[1])
-
-            graph_viz.edge(edge[0], edge[1], label=labels[edge])
+            if labels[edge]=='eps':
+                graph_viz.edge(edge[0], edge[1], label='ε')
+            else:
+                graph_viz.edge(edge[0], edge[1], label=labels[edge])
 
     def addEdge(self):
         fromNode = self.fromNodeTxt.text()
