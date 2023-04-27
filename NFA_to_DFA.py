@@ -342,6 +342,25 @@ class HomeScreen(QMainWindow):
                     alphabet, nextNodeList, visited, nodePattern)
 
     def convert(self):
+        initialFlag=False
+        finalFlag=False
+        if len(nx.nodes(self.NFA))==0:
+            self.errorMessage('Error','Please enter your NFA')
+            return
+
+        for node in nx.nodes(self.NFA):
+            if self.NFA.nodes[node]['initial']:
+                initialFlag=True
+            if self.NFA.nodes[node]['final']:
+                finalFlag=True
+
+        if not initialFlag:
+            self.errorMessage('Error','NFA must have at least one initial state')
+            return
+        if not finalFlag:
+            self.errorMessage('Error','NFA must have at least one final state')
+
+
         edge_labels = nx.get_edge_attributes(self.NFA, 'label')
 
         # get the alphabet used by the NFA
