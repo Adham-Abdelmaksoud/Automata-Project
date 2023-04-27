@@ -9,7 +9,7 @@ import networkx as nx
 import numpy as np
 import sys
 from random import random
-
+from PyQt5.QtWidgets import QMessageBox
 import graphviz as gv
 from matplotlib import image
 import cv2

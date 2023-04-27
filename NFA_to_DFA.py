@@ -1,3 +1,5 @@
+import networkx as nx
+
 from util import *
 
 class HomeScreen(QMainWindow):
@@ -20,6 +22,10 @@ class HomeScreen(QMainWindow):
         self.toIsInitial = self.findChild(QCheckBox, 'initial2')
         self.fromIsFinal = self.findChild(QCheckBox, 'final1')
         self.toIsFinal = self.findChild(QCheckBox, 'final2')
+        self.error_empty_fields = self.findChild(QLabel,'error_empty_fields')
+        self.star_from_node = self.findChild(QLabel, 'star_from_node')
+        self.star_to_node = self.findChild(QLabel, 'star_to_node')
+        self.star_transition_edge = self.findChild(QLabel, 'star_transition_edge')
 
         self.NFA = nx.DiGraph()
         self.DFA = nx.DiGraph()
@@ -178,24 +184,90 @@ class HomeScreen(QMainWindow):
         self.toNodeTxt.setText('')
         self.edgeLabelTxt.setText('')
 
+        if fromNode=='':
+            self.star_from_node.setText('*')
+            self.error_empty_fields.setText('Please enter from node')
+            return
+
+        elif toNode=='':
+            self.star_to_node.setText('*')
+            self.error_empty_fields.setText('Please enter to node')
+            return
+
+        elif edgeLbl=='':
+            self.star_transition_edge.setText('*')
+            self.error_empty_fields.setText('Please enter transition edge')
+            return
+
+
+        if self.toIsInitial.isChecked() and self.fromIsInitial.isChecked():
+            self.errorMessage('Error', 'NFA can have only one initial state')
+            self.clearStarFields()
+            return
+
+        if self.fromIsInitial.isChecked():
+            if fromNode in nx.nodes(self.NFA):
+                if self.NFA.nodes[fromNode]['initial']:
+                    pass
+                else:
+                    for node in nx.nodes(self.NFA):
+                        if self.NFA.nodes[node]['initial']:
+                            self.errorMessage('Error', 'NFA can have only one initial state')
+                            self.clearStarFields()
+                            return
+            else:
+                for node in nx.nodes(self.NFA):
+                    if self.NFA.nodes[node]['initial']:
+                        self.errorMessage('Error', 'NFA can have only one initial state')
+                        self.clearStarFields()
+                        return
+
+
+        if self.toIsInitial.isChecked():
+            if toNode in nx.nodes(self.NFA):
+                if self.NFA.nodes[toNode]['initial']:
+                    pass
+                else:
+                    for node in nx.nodes(self.NFA):
+                        if self.NFA.nodes[node]['initial']:
+                            self.errorMessage('Error', 'NFA can have only one initial state')
+                            self.clearStarFields()
+                            return
+            else:
+                for node in nx.nodes(self.NFA):
+                    if self.NFA.nodes[node]['initial']:
+                        self.errorMessage('Error', 'NFA can have only one initial state')
+                        self.clearStarFields()
+                        return
+
+
+
         if (fromNode != '' and toNode != ''):
             self.NFA.add_edge(fromNode, toNode, label=edgeLbl)
+            self.clearStarFields()
+
 
         if (self.fromIsFinal.isChecked()):
             self.NFA.nodes[fromNode]['final'] = True
+
         else:
             self.NFA.nodes[fromNode]['final'] = False
+
         if (self.fromIsInitial.isChecked()):
             self.NFA.nodes[fromNode]['initial'] = True
+
         else:
             self.NFA.nodes[fromNode]['initial'] = False
 
         if (self.toIsFinal.isChecked()):
             self.NFA.nodes[toNode]['final'] = True
+
         else:
             self.NFA.nodes[toNode]['final'] = False
+
         if (self.toIsInitial.isChecked()):
             self.NFA.nodes[toNode]['initial'] = True
+
         else:
             self.NFA.nodes[toNode]['initial'] = False
 
@@ -326,5 +398,18 @@ class HomeScreen(QMainWindow):
         # display the DFA
         self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
+
+    def errorMessage(self,title,text):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(text)
+        msg.setWindowTitle(title)
+        msg.exec_()
+
+    def clearStarFields(self):
+        self.star_from_node.setText('')
+        self.star_to_node.setText('')
+        self.star_transition_edge.setText('')
+        self.error_empty_fields.setText('')
 
 
