@@ -134,6 +134,7 @@ class HomeScreen(QMainWindow):
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
+        self.clearStarFields()
         
         ## Engy: I made the clear button clears both graphs ## 
         self.DFA = nx.DiGraph()
@@ -178,30 +179,33 @@ class HomeScreen(QMainWindow):
                 graph_viz.edge(edge[0], edge[1], label=labels[edge])
 
     def addEdge(self):
+        emptyField = False
         fromNode = self.fromNodeTxt.text()
         toNode = self.toNodeTxt.text()
         edgeLbl = self.edgeLabelTxt.text()
 
-        self.fromNodeTxt.setText('')
-        self.toNodeTxt.setText('')
-        self.edgeLabelTxt.setText('')
+
 
         if fromNode=='':
-            self.clearStarFields()
+            emptyField=True
             self.star_from_node.setText('*')
-            self.error_empty_fields.setText('Please enter from node')
-            return
+        else:
+            self.star_from_node.setText('')
 
-        elif toNode=='':
-            self.clearStarFields()
+        if toNode=='':
+            emptyField = True
             self.star_to_node.setText('*')
-            self.error_empty_fields.setText('Please enter to node')
-            return
+        else:
+            self.star_to_node.setText('')
 
-        elif edgeLbl=='':
-            self.clearStarFields()
+        if edgeLbl=='':
+            emptyField = True
             self.star_transition_edge.setText('*')
-            self.error_empty_fields.setText('Please enter transition edge')
+        else:
+            self.star_transition_edge.setText('')
+
+        if emptyField:
+            self.error_empty_fields.setText('Please Fill Empty Fields')
             return
 
 
@@ -280,6 +284,9 @@ class HomeScreen(QMainWindow):
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
+        self.fromNodeTxt.setText('')
+        self.toNodeTxt.setText('')
+        self.edgeLabelTxt.setText('')
 
     def markInitialAndFinal(self, initial):
         for nodeStr in self.DFA.nodes:
@@ -364,6 +371,7 @@ class HomeScreen(QMainWindow):
             return
         if not finalFlag:
             self.errorMessage('Error','NFA must have at least one final state')
+            return
 
 
         edge_labels = nx.get_edge_attributes(self.NFA, 'label')
