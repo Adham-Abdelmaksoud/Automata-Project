@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1029</width>
-    <height>792</height>
+    <height>919</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,6 +116,12 @@ border-style: inset;
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QWidget" name="NFA_Widget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>300</height>
+          </size>
+         </property>
          <property name="autoFillBackground">
           <bool>false</bool>
          </property>
@@ -127,6 +133,12 @@ border-color: rgb(85, 0, 255);</string>
        </item>
        <item>
         <widget class="QWidget" name="DFA_Widget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>500</height>
+          </size>
+         </property>
          <property name="autoFillBackground">
           <bool>false</bool>
          </property>
@@ -174,89 +186,13 @@ border-color: rgb(85, 0, 255);</string>
                 <number>0</number>
                </property>
                <item row="3" column="3" alignment="Qt::AlignHCenter">
-                <widget class="QCheckBox" name="final2">
+                <widget class="QCheckBox" name="initial2">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="3">
-                <widget class="QLabel" name="label_5">
-                 <property name="font">
-                  <font>
-                   <family>MS Shell Dlg 2</family>
-                   <pointsize>13</pointsize>
-                   <weight>50</weight>
-                   <italic>false</italic>
-                   <bold>false</bold>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLabel{
-	font: 13pt &quot;MS Shell Dlg 2&quot;;
-	margin-right: 3px;
-	color: rgb(85, 0, 255);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>  Is Final?</string>
-                 </property>
-                </widget>
-               </item>
                <item row="3" column="1">
-                <widget class="QLineEdit" name="toNodeTxt">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_3">
-                 <property name="font">
-                  <font>
-                   <family>MS Shell Dlg 2</family>
-                   <pointsize>13</pointsize>
-                   <weight>50</weight>
-                   <italic>false</italic>
-                   <bold>false</bold>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLabel{
-	font: 13pt &quot;MS Shell Dlg 2&quot;;
-	margin-right: 3px;
-	color: rgb(85, 0, 255);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Transition Edge: </string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLineEdit" name="fromNodeTxt">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QLineEdit" name="edgeLabelTxt">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
                 <widget class="QLabel" name="label_2">
                  <property name="font">
                   <font>
@@ -279,7 +215,40 @@ border-color: rgb(85, 0, 255);</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="2" alignment="Qt::AlignHCenter">
+               <item row="4" column="2">
+                <widget class="QLineEdit" name="edgeLabelTxt">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="label">
+                 <property name="font">
+                  <font>
+                   <family>MS Shell Dlg 2</family>
+                   <pointsize>13</pointsize>
+                   <weight>50</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel{
+	font: 13pt &quot;MS Shell Dlg 2&quot;;
+	margin-right: 3px;
+	color: rgb(85, 0, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>From Node: </string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3" alignment="Qt::AlignHCenter">
                 <widget class="QCheckBox" name="initial1">
                  <property name="layoutDirection">
                   <enum>Qt::LeftToRight</enum>
@@ -292,7 +261,57 @@ border-color: rgb(85, 0, 255);</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
+               <item row="3" column="4" alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="final2">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="4">
+                <widget class="QLabel" name="label_5">
+                 <property name="font">
+                  <font>
+                   <family>MS Shell Dlg 2</family>
+                   <pointsize>13</pointsize>
+                   <weight>50</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel{
+	font: 13pt &quot;MS Shell Dlg 2&quot;;
+	margin-right: 3px;
+	color: rgb(85, 0, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>  Is Final?</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLineEdit" name="fromNodeTxt">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLineEdit" name="toNodeTxt">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
                 <widget class="QLabel" name="label_4">
                  <property name="maximumSize">
                   <size>
@@ -321,22 +340,8 @@ border-color: rgb(85, 0, 255);</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="3" alignment="Qt::AlignHCenter">
-                <widget class="QCheckBox" name="final1">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2" alignment="Qt::AlignHCenter">
-                <widget class="QCheckBox" name="initial2">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label">
+               <item row="4" column="1">
+                <widget class="QLabel" name="label_3">
                  <property name="font">
                   <font>
                    <family>MS Shell Dlg 2</family>
@@ -354,7 +359,35 @@ border-color: rgb(85, 0, 255);</string>
 }</string>
                  </property>
                  <property name="text">
-                  <string>From Node: </string>
+                  <string>Transition Edge: </string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="4" alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="final1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="star_transition_edge">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="star_to_node">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="star_from_node">
+                 <property name="text">
+                  <string/>
                  </property>
                 </widget>
                </item>
@@ -380,6 +413,12 @@ border-color: rgb(85, 0, 255);</string>
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <item>
                  <widget class="QPushButton" name="addEdgeBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
                   <property name="maximumSize">
                    <size>
                     <width>200</width>
@@ -408,6 +447,12 @@ border-radius: 15px;</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="clearGraphBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
                   <property name="maximumSize">
                    <size>
                     <width>200</width>
@@ -435,6 +480,19 @@ border-radius: 15px;</string>
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="error_empty_fields">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
               </widget>
              </item>
             </layout>
