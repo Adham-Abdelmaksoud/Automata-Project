@@ -3,5 +3,5 @@ digraph {
 	a [shape=circle]
 	b [shape=circle]
 	"" -> a
-	a -> b [label="ε"]
+	a -> b [label=0]
 }

@@ -187,16 +187,19 @@ class HomeScreen(QMainWindow):
         self.edgeLabelTxt.setText('')
 
         if fromNode=='':
+            self.clearStarFields()
             self.star_from_node.setText('*')
             self.error_empty_fields.setText('Please enter from node')
             return
 
         elif toNode=='':
+            self.clearStarFields()
             self.star_to_node.setText('*')
             self.error_empty_fields.setText('Please enter to node')
             return
 
         elif edgeLbl=='':
+            self.clearStarFields()
             self.star_transition_edge.setText('*')
             self.error_empty_fields.setText('Please enter transition edge')
             return
