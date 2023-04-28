@@ -33,8 +33,8 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_6">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="label_6" >
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -61,8 +61,8 @@ font: 30pt &quot;Gabriola&quot;;
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="label_7">
+       <item  alignment="Qt::AlignHCenter"> 
+        <widget class="QLabel" name="label_7" >
          <property name="maximumSize">
           <size>
            <width>16777215</width>
