@@ -132,7 +132,6 @@ class HomeScreen(QMainWindow):
         self.NFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
-        self.fromNXtoGV(self.NFA, self.NFA_viz)
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
         self.clearStarFields()
         
@@ -140,7 +139,6 @@ class HomeScreen(QMainWindow):
         self.DFA = nx.DiGraph()
         self.DFA_viz = gv.Digraph()
         self.DFA_viz.node('', shape='none')
-        self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
         ## ##
 
@@ -306,18 +304,24 @@ class HomeScreen(QMainWindow):
                     self.DFA.nodes[nodeStr]['final'] = True
                     break
 
+    def addEpsilonTransitions(self, nodeList, visited):
+        nodeSet = set(nodeList)
+        for node in nodeList:
+            if node not in visited:
+                visited.append(node)
+                epsDstNodes = self.NFA.nodes[node]['eps']
+                if len(epsDstNodes) != 0:
+                    nodeSet = nodeSet.union(epsDstNodes)
+                    nodeSet = self.addEpsilonTransitions(list(nodeSet), visited)
+        return nodeSet
+
     def getNextNodeSet(self, nodeList, alpha, isEpsilonNFA):
         nextNodeSet = set()
         for node in nodeList:
-            if isEpsilonNFA:
-                epsDstNodes = self.NFA.nodes[node]['eps']
-                for dstNode in list(epsDstNodes):
-                    if self.NFA.nodes[dstNode]['final'] == True:
-                        self.NFA.nodes[node]['final'] = True
-                if len(epsDstNodes) != 0:
-                    nextNodeSet = nextNodeSet.union(self.getNextNodeSet(
-                        list(epsDstNodes), alpha, isEpsilonNFA))
             nextNodeSet = nextNodeSet.union(self.NFA.nodes[node][alpha])
+        if isEpsilonNFA:
+            visited = []
+            nextNodeSet = self.addEpsilonTransitions(list(nextNodeSet), visited)
         return nextNodeSet
 
     def addTransitionTuple(self, alphabet, nodeList, visited, nodePattern):
@@ -400,6 +404,17 @@ class HomeScreen(QMainWindow):
             for lbl in lbl_vals:
                 self.NFA.nodes[edge[0]][lbl].add(edge[1])
 
+        # for the initial node list
+        initialNodeSet = {initialNode}
+        if 'eps' in alphabet:
+            visited = []
+            initialNodeSet = self.addEpsilonTransitions(list(initialNodeSet), visited)
+        initialNodeList = []
+        for node in nodePattern:
+            if node in initialNodeSet:
+                initialNodeList.append(node)
+        initialNodeStr = ",".join(initialNodeList)
+
         # initialize DFA
         self.DFA = nx.DiGraph()
         self.DFA_viz = gv.Digraph()
@@ -407,13 +422,13 @@ class HomeScreen(QMainWindow):
 
         # traversing initializations
         visited = []
-        self.DFA.add_node(initialNode)
+        self.DFA.add_node(initialNodeStr)
 
         # form the DFA transition table
-        self.addTransitionTuple(alphabet, [initialNode], visited, nodePattern)
+        self.addTransitionTuple(alphabet, initialNodeList, visited, nodePattern)
 
         # mark initial and final nodes
-        self.markInitialAndFinal(initialNode)
+        self.markInitialAndFinal(initialNodeStr)
 
         # add the DFA edges
         if 'eps' in alphabet:
