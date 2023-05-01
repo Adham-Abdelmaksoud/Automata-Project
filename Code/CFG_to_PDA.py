@@ -19,8 +19,7 @@ class CFGtoPDA(QMainWindow):
 
 
     def goback(self):
-        sceneStack.setFixedWidth(875)
-        sceneStack.setFixedHeight(540)
+        sceneStack.resize(875, 540)
         sceneStack.setCurrentIndex(0)
     
 

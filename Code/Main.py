@@ -14,13 +14,11 @@ class Home(QMainWindow):
         self.btn2.clicked.connect(self.gotoCFGtoPDA)
 
     def gotoNFAtoDFA(self):
-        sceneStack.setFixedWidth(1100)
-        sceneStack.setFixedHeight(800)
+        sceneStack.resize(1029, 973)
         sceneStack.setCurrentIndex(1)
 
     def gotoCFGtoPDA(self):
-        sceneStack.setFixedWidth(1100)
-        sceneStack.setFixedHeight(650)
+        sceneStack.resize(1100, 650)
         sceneStack.setCurrentIndex(2)
 
 def main():
@@ -32,8 +30,9 @@ def main():
     sceneStack.addWidget(nfatodfa)
     sceneStack.addWidget(cfgtopda)
 
-    sceneStack.setFixedWidth(875)
-    sceneStack.setFixedHeight(540)
+    sceneStack.setMinimumWidth(875)
+    sceneStack.setMinimumHeight(540)
+    sceneStack.resize(875, 540)
     sceneStack.show()
 
     app.exec_()
