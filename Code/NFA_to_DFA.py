@@ -2,10 +2,10 @@ import networkx as nx
 
 from util import *
 
-class HomeScreen(QMainWindow):
+class NFAtoDFA(QMainWindow):
     def __init__(self):
-        super(HomeScreen, self).__init__()
-        uic.loadUi('edited_NFA_to_DFA.ui', self)
+        super(NFAtoDFA, self).__init__()
+        uic.loadUi('UI/edited_NFA_to_DFA.ui', self)
         self.show()
         self.lastRand = 0
 
