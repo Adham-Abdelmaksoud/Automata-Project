@@ -15,6 +15,7 @@ import cv2
 
 app = QApplication(sys.argv)
 sceneStack = QStackedWidget()
+sceneStack_Manuals = QStackedWidget()
 
 class GraphWidget(QWidget):
     def __init__(self):

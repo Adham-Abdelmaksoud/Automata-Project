@@ -15,6 +15,7 @@ class NFAtoDFA(QMainWindow):
         self.toNodeTxt = self.findChild(QLineEdit, 'toNodeTxt')
         self.edgeLabelTxt = self.findChild(QLineEdit, 'edgeLabelTxt')
         self.convertBtn = self.findChild(QPushButton, 'convertBtn')
+        self.backbtn = self.findChild(QPushButton,'backbtn')
         self.addEdgeBtn = self.findChild(QPushButton, 'addEdgeBtn')
         self.generateBtn = self.findChild(QPushButton, 'generateGraphBtn')
         self.clearBtn = self.findChild(QPushButton, 'clearGraphBtn')
@@ -42,6 +43,12 @@ class NFAtoDFA(QMainWindow):
         self.convertBtn.clicked.connect(self.convert)
         self.generateBtn.clicked.connect(self.generateGraph)
         self.clearBtn.clicked.connect(self.clear)
+        self.backbtn.clicked.connect(self.goback)
+
+    def goback(self):
+        sceneStack.resize(875, 540)
+        sceneStack.setCurrentIndex(0)
+        sceneStack_Manuals.close()
 
     def generateGraph(self):
         self.NFA_viz = gv.Digraph()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1029</width>
-    <height>919</height>
+    <height>941</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="label_6" >
+        <widget class="QLabel" name="label_6">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -61,8 +61,8 @@ font: 30pt &quot;Gabriola&quot;;
          </property>
         </widget>
        </item>
-       <item  alignment="Qt::AlignHCenter"> 
-        <widget class="QLabel" name="label_7" >
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="label_7">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -563,6 +563,37 @@ border-radius: 15px;</string>
                </property>
                <property name="text">
                 <string>Convert NFA To DFA</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="backbtn">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>MS Shell Dlg 2</family>
+                 <pointsize>14</pointsize>
+                 <weight>9</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(85, 0, 255);
+color: rgb(255, 255, 255);
+border-radius: 15px;</string>
+               </property>
+               <property name="text">
+                <string>Back</string>
                </property>
                <property name="flat">
                 <bool>false</bool>

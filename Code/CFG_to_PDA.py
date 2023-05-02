@@ -21,6 +21,7 @@ class CFGtoPDA(QMainWindow):
     def goback(self):
         sceneStack.resize(875, 540)
         sceneStack.setCurrentIndex(0)
+        sceneStack_Manuals.close()
     
 
     def plot(self, imgName, graph_viz, layout, label):

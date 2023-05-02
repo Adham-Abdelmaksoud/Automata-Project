@@ -1,6 +1,7 @@
 from util import *
 from NFA_to_DFA import NFAtoDFA
 from CFG_to_PDA import CFGtoPDA
+from User_Manual import User_Manual
 
 class Home(QMainWindow):
     def __init__(self):
@@ -14,6 +15,8 @@ class Home(QMainWindow):
         self.btn2.clicked.connect(self.gotoCFGtoPDA)
 
     def gotoNFAtoDFA(self):
+        sceneStack_Manuals.setCurrentIndex(0)
+        sceneStack_Manuals.show()
         sceneStack.resize(1029, 973)
         sceneStack.setCurrentIndex(1)
 
@@ -25,6 +28,7 @@ def main():
     home = Home()
     nfatodfa = NFAtoDFA()
     cfgtopda = CFGtoPDA()
+    NFAusermanual = User_Manual()
 
     sceneStack.addWidget(home)
     sceneStack.addWidget(nfatodfa)
@@ -34,6 +38,11 @@ def main():
     sceneStack.setMinimumHeight(540)
     sceneStack.resize(875, 540)
     sceneStack.show()
+
+    sceneStack_Manuals.addWidget(NFAusermanual)
+    sceneStack_Manuals.resize(860, 800)
+    sceneStack_Manuals.setFixedWidth(860)
+    sceneStack_Manuals.setFixedHeight(800)
 
     app.exec_()
 
