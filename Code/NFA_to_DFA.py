@@ -5,7 +5,7 @@ from util import *
 class NFAtoDFA(QMainWindow):
     def __init__(self):
         super(NFAtoDFA, self).__init__()
-        uic.loadUi('UI/edited_NFA_to_DFA.ui', self)
+        uic.loadUi('../UI/edited_NFA_to_DFA.ui', self)
         self.show()
         self.lastRand = 0
 

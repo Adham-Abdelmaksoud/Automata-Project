@@ -3,7 +3,7 @@ from util import *
 class CFGtoPDA(QMainWindow):
     def __init__(self):
         super(CFGtoPDA, self).__init__()
-        uic.loadUi('UI/CFG_to_PDA.ui', self)
+        uic.loadUi('../UI/CFG_to_PDA.ui', self)
 
         self.PDA_Widget = self.findChild(QWidget, 'PDA_Widget')
         self.back_btn = self.findChild(QPushButton, 'back_btn')

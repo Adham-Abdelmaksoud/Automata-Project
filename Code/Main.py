@@ -5,7 +5,7 @@ from CFG_to_PDA import CFGtoPDA
 class Home(QMainWindow):
     def __init__(self):
         super(Home, self).__init__()
-        uic.loadUi('UI/Home.ui', self)
+        uic.loadUi('../UI/Home.ui', self)
 
         self.btn1 = self.findChild(QPushButton, 'NFA_to_DFA_btn')
         self.btn2 = self.findChild(QPushButton, 'CFG_to_PDA_btn')
