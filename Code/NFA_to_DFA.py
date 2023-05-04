@@ -124,8 +124,25 @@ class NFAtoDFA(QMainWindow):
         graph5.nodes['q0']['initial'] = True
         graph5.nodes['q0']['final'] = True
 
+        graph6 = nx.DiGraph()
+        graph6.add_edge('q0','q1', label='eps')
+        graph6.add_edge('q0','q2', label='eps')
+        graph6.add_edge('q1','q0', label='eps')
+        graph6.add_edge('q2','q6', label='eps')
+        graph6.add_edge('q2','q4', label='eps')
+        graph6.add_edge('q6','q7', label='b')
+        graph6.add_edge('q4','q5', label='a')
+        graph6.add_edge('q5','q3', label='eps')
+        graph6.add_edge('q7','q3', label='eps')
+        graph6.add_edge('q3','q1', label='eps')
+        for node in graph6.nodes:
+            graph6.nodes[node]['initial'] = False
+            graph6.nodes[node]['final'] = False
+        graph6.nodes['q0']['initial'] = True
+        graph6.nodes['q1']['final'] = True
 
-        graphs = [graph1, graph2, graph3, graph4, graph5]
+
+        graphs = [graph1, graph2, graph3, graph4, graph5, graph6]
         rand = int(random()*len(graphs))
         while rand == self.lastRand:
             rand = int(random()*len(graphs))
@@ -364,6 +381,137 @@ class NFAtoDFA(QMainWindow):
                 self.addTransitionTuple(
                     alphabet, nextNodeList, visited, nodePattern)
 
+    def optimizeDFA(self, alphabet, nodePattern):
+        transitions = dict()
+        edge_labels = nx.get_edge_attributes(self.DFA, 'label')
+
+        # initialize the DFA transition table
+        for node in self.DFA.nodes:
+            transitions[node] = dict()
+
+        # fill the DFA transition table
+        for edge in self.DFA.edges:
+            lbl_vals = edge_labels[edge].split(',')
+            for lbl in lbl_vals:
+                transitions[edge[0]][lbl] = edge[1]
+
+        newClusters = [[], []]
+        oldClusters = []
+        # initialize the initial cluster
+        for node in self.DFA.nodes:
+            if self.DFA.nodes[node]['final']:
+                newClusters[1].append(node)
+            else:
+                newClusters[0].append(node)
+        remove = -1
+        for i in range(2):
+            if(len(newClusters[i]) == 0):
+                remove = i
+        if remove != -1:
+            newClusters.pop(remove)
+
+        # perform divisive clustering
+        while(len(oldClusters)!=len(newClusters)):
+            oldClusters = newClusters
+            newClusters = []
+            # for each cluster
+            for oldCluster in oldClusters:
+                # put a single node in the cluster
+                if len(oldCluster) == 1:
+                    newClusters.append(oldCluster)
+                    continue
+                newClusters.append([oldCluster[0]])
+                
+                # for each element in the cluster
+                for element in oldCluster:
+                    inCluster = False
+                    # search for a new cluster to add the element
+                    for i in range(len(newClusters)):
+                        if newClusters[i][0] not in oldCluster:
+                            continue
+                        # if the element is already clustered
+                        if element == newClusters[i][0]:
+                            inCluster = True
+                            break
+                        # if the element has same transitions as any element in the new cluster
+                        areSimilar = True
+                        for alpha in alphabet:
+                            dst1 = transitions[element][alpha]
+                            dst2 = transitions[newClusters[i][0]][alpha]
+                            for cluster in oldClusters:
+                                if dst1 in cluster and dst2 not in cluster:
+                                    areSimilar = False
+                                    break
+                            if not areSimilar:
+                                break
+                        # add the element in the suitable cluster
+                        if areSimilar:
+                            newClusters[i].append(element)
+                            inCluster = True
+                            break
+                    # if no cluster is found for the element, create a new cluster
+                    if not inCluster:
+                        newClusters.append([element])
+            
+        self.DFA_optimized = nx.DiGraph()
+        newNodes = []
+        newTransitions = dict()
+
+        for i in range(len(newClusters)):
+            nodeSet = set()
+            newTransitions[i] = dict()
+            isInitial = False
+            isFinal = False
+
+            # create new transition table
+            for element in newClusters[i]:
+                for alpha in alphabet:
+                    for j in range(len(newClusters)):
+                        if transitions[element][alpha] in newClusters[j]:
+                            if j in newTransitions[i].keys():
+                                newTransitions[i][j].add(alpha)
+                            else:
+                                newTransitions[i][j] = {alpha}
+
+                # mark initial and final nodes
+                if self.DFA.nodes[element]['initial']:
+                    isInitial = True
+                if self.DFA.nodes[element]['final']:
+                    isFinal = True
+
+                brokenElement = element.split(',')
+                for b in brokenElement:
+                    nodeSet.add(b)
+
+            # add all new nodes
+            nodeList = []
+            if 'rej' in nodeSet:
+                nodeList = ['rej']
+            else:
+                for node in nodePattern:
+                    if node in nodeSet:
+                        nodeList.append(node)
+            nodeStr = ",".join(nodeList)
+            newNodes.append(nodeStr)
+            self.DFA_optimized.add_node(nodeStr)
+            
+            # set initial and final nodes
+            if isInitial:
+                self.DFA_optimized.nodes[nodeStr]['initial'] = True
+            else:
+                self.DFA_optimized.nodes[nodeStr]['initial'] = False
+            if isFinal:
+                self.DFA_optimized.nodes[nodeStr]['final'] = True
+            else:
+                self.DFA_optimized.nodes[nodeStr]['final'] = False
+
+        # add optimized DFA edges
+        for i in newTransitions:
+            for j in newTransitions[i]:
+                self.DFA_optimized.add_edge(newNodes[i], newNodes[j], label=",".join(list(newTransitions[i][j])))
+
+        self.DFA = self.DFA_optimized  
+
     def convert(self):
         initialFlag=False
         finalFlag=False
@@ -450,6 +598,7 @@ class NFAtoDFA(QMainWindow):
                             list(self.DFA.nodes[fromNode][toNode])))
 
         # display the DFA
+        self.optimizeDFA(alphabet, nodePattern)
         self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
 
