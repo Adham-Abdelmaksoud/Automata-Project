@@ -27,14 +27,12 @@ class NFAtoDFA(QMainWindow):
         self.star_from_node = self.findChild(QLabel, 'star_from_node')
         self.star_to_node = self.findChild(QLabel, 'star_to_node')
         self.star_transition_edge = self.findChild(QLabel, 'star_transition_edge')
-
         self.NFA = nx.DiGraph()
         self.DFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
         self.DFA_viz = gv.Digraph()
         self.NFA_lbl = QLabel(self)
         self.DFA_lbl = QLabel(self)
-
         self.NFA_viz.node('', shape='none')
         self.NFA_layout = QVBoxLayout(self.NFA_Widget)
         self.DFA_layout = QVBoxLayout(self.DFA_Widget)
@@ -519,7 +517,7 @@ class NFAtoDFA(QMainWindow):
         msg.setWindowTitle(title)
         msg.exec_()
 
-    def clearStarFields(self):
+    def clearStarFields(self)->None:
         self.star_from_node.setText('')
         self.star_to_node.setText('')
         self.star_transition_edge.setText('')

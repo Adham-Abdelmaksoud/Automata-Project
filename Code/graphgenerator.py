@@ -91,8 +91,18 @@ graph6.nodes['q1']['final'] = True
 
 graphs = [graph1, graph2, graph3, graph4, graph5, graph6]
 
+
 def generateRandom_graph(lastRand):
+    """when generate is clicked on the gui the function randomly generate a number between 1 to 6 and check that the same is not repeated twice when the last graph index is not equal the new one returns the graph and the index
+
+    Args:
+        lastRand (Integer): the index of the last used graph to avoid redunduncy
+
+    Returns:
+        nx digraph:the random graph that will be used as an example
+        integer: the index of the new example graph
+    """
     rand = int(random()*len(graphs))
     while rand == lastRand:
         rand = int(random()*len(graphs))
-    return graphs[rand],rand
+    return graphs[rand], rand
