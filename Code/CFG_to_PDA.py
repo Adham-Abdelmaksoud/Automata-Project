@@ -5,6 +5,7 @@ class CFGtoPDA(QMainWindow):
         super(CFGtoPDA, self).__init__()
         uic.loadUi('../UI/CFG_to_PDA.ui', self)
 
+        self.PDA_Widget = self.findChild(QWidget, 'PDA_Widget')
         self.startSymbol_txt = self.findChild(QLineEdit, 'startSymbol_txt')
         self.terminalSymbols_txt = self.findChild(QLineEdit, 'terminalSymbols_txt')
         self.CFG_txt = self.findChild(QTextEdit, 'CFG_txt')
@@ -48,8 +49,6 @@ class CFGtoPDA(QMainWindow):
         self.startSymbol = self.startSymbol_txt.text()
         self.terminalSymbols = self.terminalSymbols_txt.text().split(',')
         self.CFGrules = self.CFG_txt.toPlainText().split('\n')
-
-        self.PDA_viz = gv.Digraph()
 
         transitions = []
         transitions.append(
@@ -117,6 +116,70 @@ class CFGtoPDA(QMainWindow):
         self.PDA_viz.node(f'q{stateCounter+1}', shape='doublecircle')
         self.PDA_viz.edge(f'q3', f'q{stateCounter + 1}', label='ε,$->ε',constraint='false')
 
+
+
+        # GRAPH
+        # | | |
+        # v v v
+        self.PDA_viz = gv.Digraph()
+        self.PDA_viz.node('', shape='none')
+
+        self.PDA_viz.node('q1', shape='circle')
+        self.PDA_viz.node('q2', shape='circle')
+        self.PDA_viz.node('q3', shape='circle')
+        self.PDA_viz.edge('', 'q1')
+        self.PDA_viz.edge('q1', 'q2', label='ε/ε/$')
+        self.PDA_viz.edge('q2', 'q3', label='ε/ε/'+self.startSymbol)
+
+        stateCounter = 3
+
+        for terminal in self.terminalSymbols:
+            self.PDA_viz.edge('q3', 'q3', label=f'{terminal}/{terminal}/ε')
+
+        for rule in self.CFGrules:
+            if rule == '':
+                continue
+            rule = rule.replace(' ', '')
+            start, allProduced = rule.split('->')
+            for produced in allProduced.split('|'):
+                if produced == 'eps':
+                    produced = 'ε'
+                isFirstChar = True
+                charCounter = 0
+                for char in produced[::-1]:
+                    charCounter += 1
+                    if charCounter == len(produced):
+                        self.PDA_viz.edge(
+                            f'q{stateCounter}',
+                            'q3',
+                            label=f'ε/ε/{char}'
+                        )
+                        break
+                    self.PDA_viz.node(f'q{stateCounter+1}', shape='circle')
+                    if(isFirstChar):
+                        self.PDA_viz.edge(
+                            'q3',
+                            f'q{stateCounter+1}',
+                            label=f'ε/{start}/{char}'
+                        )
+                        isFirstChar = False
+                    else:
+                        self.PDA_viz.edge(
+                            f'q{stateCounter}',
+                            f'q{stateCounter+1}',
+                            label=f'ε/ε/{char}'
+                        )
+                    stateCounter += 1
+
+        self.PDA_viz.node(f'q{stateCounter+1}', shape='doublecircle')
+        self.PDA_viz.edge('q3', f'q{stateCounter+1}', label='ε/$/ε')
+
+        self.plot('PDA', self.PDA_viz, self.PDA_layout, self.PDA_lbl)
+        # ^ ^ ^
+        # | | |
+        # GRAPH
+
+        
 
         transitions.sort(key=self.getStateNum)
         transitions = "\n".join(transitions)
