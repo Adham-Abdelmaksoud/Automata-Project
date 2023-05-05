@@ -83,7 +83,7 @@ class NFAtoDFA(QMainWindow):
         self.DFA_viz = gv.Digraph()
         self.DFA_viz.node('', shape='none')
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
-        # clear the input fields
+        # clear the error fields
         self.clearStarFields()
 
     def plot(self, imgName, graph_viz, layout, label):

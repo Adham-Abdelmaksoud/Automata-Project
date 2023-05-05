@@ -5,27 +5,42 @@ class CFGtoPDA(QMainWindow):
         super(CFGtoPDA, self).__init__()
         uic.loadUi('../UI/CFG_to_PDA.ui', self)
 
-        self.PDA_Widget = self.findChild(QWidget, 'PDA_Widget')
+        # self.PDA_Widget = self.findChild(QWidget, 'PDA_Widget')
         self.startSymbol_txt = self.findChild(QLineEdit, 'startSymbol_txt')
         self.terminalSymbols_txt = self.findChild(QLineEdit, 'terminalSymbols_txt')
         self.CFG_txt = self.findChild(QTextEdit, 'CFG_txt')
         self.PDA_output = self.findChild(QTextEdit, 'PDA_output')
         self.convert_btn = self.findChild(QPushButton, 'convert_btn')
         self.back_btn = self.findChild(QPushButton, 'back_btn')
-
+        self.clear_btn = self.findChild(QPushButton, 'clear_btn')
+        self.visualizePDA_btn = self.findChild(QPushButton,"visualizePDA_btn")
         self.PDA_viz = gv.Digraph()
         self.PDA_lbl = QLabel(self)
-        self.PDA_layout = QVBoxLayout(self.PDA_Widget)
+
 
         self.convert_btn.clicked.connect(self.convert)
         self.back_btn.clicked.connect(self.goback)
+        self.clear_btn.clicked.connect(self.clear)
+        self.visualizePDA_btn.clicked.connect(self.visualizePDA)
 
+
+    def clear(self):
+        self.PDA_output.clear()
+        self.startSymbol_txt.clear()
+        self.terminalSymbols_txt.clear()
+        self.PDA_viz = gv.Digraph()
+        self.CFG_txt.clear()
+
+    def visualizePDA(self):
+        self.PDA_viz.format = 'pdf'
+        self.PDA_viz.render('PDA', view=True)
+        self.visualizePDA_btn.setEnabled(False)
 
     def goback(self):
         sceneStack.resize(875, 540)
         sceneStack.setCurrentIndex(0)
+        self.clear()
         sceneStack_Manuals.close()
-    
 
     def plot(self, imgName, graph_viz, layout, label):
         self.layout = layout
@@ -174,7 +189,7 @@ class CFGtoPDA(QMainWindow):
         self.PDA_viz.node(f'q{stateCounter+1}', shape='doublecircle')
         self.PDA_viz.edge('q3', f'q{stateCounter+1}', label='ε/$/ε')
 
-        self.plot('PDA', self.PDA_viz, self.PDA_layout, self.PDA_lbl)
+        # self.plot('PDA', self.PDA_viz, self.PDA_layout, self.PDA_lbl)
         # ^ ^ ^
         # | | |
         # GRAPH
@@ -184,7 +199,4 @@ class CFGtoPDA(QMainWindow):
         transitions.sort(key=self.getStateNum)
         transitions = "\n".join(transitions)
         self.PDA_output.setPlainText(transitions)
-        self.PDA_viz.format = 'pdf'
-        self.PDA_viz.render('CFG', view=True)
-        # u=self.PDA_viz.unflatten(stagger=10)
-        # u.render('CFG', view=True)
+        self.visualizePDA_btn.setEnabled(True)
