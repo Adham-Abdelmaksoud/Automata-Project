@@ -1,21 +1,26 @@
 import networkx as nx
-from graphgenerator import generateRandom_graph 
+from graphgenerator import generateRandom_graph
 from util import *
+
 
 class NFAtoDFA(QMainWindow):
     def __init__(self):
+        """initialize the Qt window to show the GUI for the NFA to DFA 
+        """
         super(NFAtoDFA, self).__init__()
+        # fetch and load ui file
         uic.loadUi('../UI/edited_NFA_to_DFA.ui', self)
         self.show()
+        # index of the last random generated graph
         self.lastRand = 0
-
+        # find childreen by ID and assign a reference in order to use them in the python file
         self.NFA_Widget = self.findChild(QWidget, 'NFA_Widget')
         self.DFA_Widget = self.findChild(QWidget, 'DFA_Widget')
         self.fromNodeTxt = self.findChild(QLineEdit, 'fromNodeTxt')
         self.toNodeTxt = self.findChild(QLineEdit, 'toNodeTxt')
         self.edgeLabelTxt = self.findChild(QLineEdit, 'edgeLabelTxt')
         self.convertBtn = self.findChild(QPushButton, 'convertBtn')
-        self.backbtn = self.findChild(QPushButton,'backbtn')
+        self.backbtn = self.findChild(QPushButton, 'backbtn')
         self.addEdgeBtn = self.findChild(QPushButton, 'addEdgeBtn')
         self.generateBtn = self.findChild(QPushButton, 'generateGraphBtn')
         self.clearBtn = self.findChild(QPushButton, 'clearGraphBtn')
@@ -23,10 +28,11 @@ class NFAtoDFA(QMainWindow):
         self.toIsInitial = self.findChild(QCheckBox, 'initial2')
         self.fromIsFinal = self.findChild(QCheckBox, 'final1')
         self.toIsFinal = self.findChild(QCheckBox, 'final2')
-        self.error_empty_fields = self.findChild(QLabel,'error_empty_fields')
+        self.error_empty_fields = self.findChild(QLabel, 'error_empty_fields')
         self.star_from_node = self.findChild(QLabel, 'star_from_node')
         self.star_to_node = self.findChild(QLabel, 'star_to_node')
-        self.star_transition_edge = self.findChild(QLabel, 'star_transition_edge')
+        self.star_transition_edge = self.findChild(
+            QLabel, 'star_transition_edge')
         self.NFA = nx.DiGraph()
         self.DFA = nx.DiGraph()
         self.NFA_viz = gv.Digraph()
@@ -36,7 +42,7 @@ class NFAtoDFA(QMainWindow):
         self.NFA_viz.node('', shape='none')
         self.NFA_layout = QVBoxLayout(self.NFA_Widget)
         self.DFA_layout = QVBoxLayout(self.DFA_Widget)
-
+        # assign some event listeners to excute some functions when cliked
         self.addEdgeBtn.clicked.connect(self.addEdge)
         self.convertBtn.clicked.connect(self.convert)
         self.generateBtn.clicked.connect(self.generateGraph)
@@ -44,6 +50,8 @@ class NFAtoDFA(QMainWindow):
         self.backbtn.clicked.connect(self.goback)
 
     def goback(self):
+        """function used to change scene to the index window
+        """
         sceneStack.resize(875, 540)
         sceneStack.setCurrentIndex(0)
         sceneStack_Manuals.close()
@@ -52,8 +60,8 @@ class NFAtoDFA(QMainWindow):
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
 
-        graph,graphindex=generateRandom_graph(self.lastRand)
-        
+        graph, graphindex = generateRandom_graph(self.lastRand)
+
         self.NFA = graph
         self.lastRand = graphindex
 
@@ -61,18 +69,21 @@ class NFAtoDFA(QMainWindow):
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
 
     def clear(self):
+        """clear all input field,warning, and graphs in the page
+        """
+        # create empty graphs
         self.NFA = nx.DiGraph()
+        self.DFA = nx.DiGraph()
+        # show the empty graphs to simulate empty ones
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
         self.plot('NFA', self.NFA_viz, self.NFA_layout, self.NFA_lbl)
-        self.clearStarFields()
-        
-        ## Engy: I made the clear button clears both graphs ## 
-        self.DFA = nx.DiGraph()
+
         self.DFA_viz = gv.Digraph()
         self.DFA_viz.node('', shape='none')
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
-        ## ##
+        # clear the input fields
+        self.clearStarFields()
 
     def plot(self, imgName, graph_viz, layout, label):
         self.layout = layout
@@ -103,7 +114,7 @@ class NFAtoDFA(QMainWindow):
             if (not isInitialSet and graph.nodes[edge[1]]['initial']):
                 isInitialSet = True
                 graph_viz.edge('', edge[1])
-            if labels[edge]=='eps':
+            if labels[edge] == 'eps':
                 graph_viz.edge(edge[0], edge[1], label='ε')
             else:
                 graph_viz.edge(edge[0], edge[1], label=labels[edge])
@@ -114,21 +125,19 @@ class NFAtoDFA(QMainWindow):
         toNode = self.toNodeTxt.text()
         edgeLbl = self.edgeLabelTxt.text()
 
-
-
-        if fromNode=='':
-            emptyField=True
+        if fromNode == '':
+            emptyField = True
             self.star_from_node.setText('*')
         else:
             self.star_from_node.setText('')
 
-        if toNode=='':
+        if toNode == '':
             emptyField = True
             self.star_to_node.setText('*')
         else:
             self.star_to_node.setText('')
 
-        if edgeLbl=='':
+        if edgeLbl == '':
             emptyField = True
             self.star_transition_edge.setText('*')
         else:
@@ -137,7 +146,6 @@ class NFAtoDFA(QMainWindow):
         if emptyField:
             self.error_empty_fields.setText('Please Fill Empty Fields')
             return
-
 
         if self.toIsInitial.isChecked() and self.fromIsInitial.isChecked():
             self.errorMessage('Error', 'NFA can have only one initial state')
@@ -151,16 +159,17 @@ class NFAtoDFA(QMainWindow):
                 else:
                     for node in nx.nodes(self.NFA):
                         if self.NFA.nodes[node]['initial']:
-                            self.errorMessage('Error', 'NFA can have only one initial state')
+                            self.errorMessage(
+                                'Error', 'NFA can have only one initial state')
                             self.clearStarFields()
                             return
             else:
                 for node in nx.nodes(self.NFA):
                     if self.NFA.nodes[node]['initial']:
-                        self.errorMessage('Error', 'NFA can have only one initial state')
+                        self.errorMessage(
+                            'Error', 'NFA can have only one initial state')
                         self.clearStarFields()
                         return
-
 
         if self.toIsInitial.isChecked():
             if toNode in nx.nodes(self.NFA):
@@ -169,22 +178,21 @@ class NFAtoDFA(QMainWindow):
                 else:
                     for node in nx.nodes(self.NFA):
                         if self.NFA.nodes[node]['initial']:
-                            self.errorMessage('Error', 'NFA can have only one initial state')
+                            self.errorMessage(
+                                'Error', 'NFA can have only one initial state')
                             self.clearStarFields()
                             return
             else:
                 for node in nx.nodes(self.NFA):
                     if self.NFA.nodes[node]['initial']:
-                        self.errorMessage('Error', 'NFA can have only one initial state')
+                        self.errorMessage(
+                            'Error', 'NFA can have only one initial state')
                         self.clearStarFields()
                         return
-
-
 
         if (fromNode != '' and toNode != ''):
             self.NFA.add_edge(fromNode, toNode, label=edgeLbl)
             self.clearStarFields()
-
 
         if (self.fromIsFinal.isChecked()):
             self.NFA.nodes[fromNode]['final'] = True
@@ -244,7 +252,8 @@ class NFAtoDFA(QMainWindow):
                 epsDstNodes = self.NFA.nodes[node]['eps']
                 if len(epsDstNodes) != 0:
                     nodeSet = nodeSet.union(epsDstNodes)
-                    nodeSet = self.addEpsilonTransitions(list(nodeSet), visited)
+                    nodeSet = self.addEpsilonTransitions(
+                        list(nodeSet), visited)
         return nodeSet
 
     def getNextNodeSet(self, nodeList, alpha, isEpsilonNFA):
@@ -253,7 +262,8 @@ class NFAtoDFA(QMainWindow):
             nextNodeSet = nextNodeSet.union(self.NFA.nodes[node][alpha])
         if isEpsilonNFA:
             visited = []
-            nextNodeSet = self.addEpsilonTransitions(list(nextNodeSet), visited)
+            nextNodeSet = self.addEpsilonTransitions(
+                list(nextNodeSet), visited)
         return nextNodeSet
 
     def addTransitionTuple(self, alphabet, nodeList, visited, nodePattern):
@@ -313,13 +323,13 @@ class NFAtoDFA(QMainWindow):
                 newClusters[0].append(node)
         remove = -1
         for i in range(2):
-            if(len(newClusters[i]) == 0):
+            if (len(newClusters[i]) == 0):
                 remove = i
         if remove != -1:
             newClusters.pop(remove)
 
         # perform divisive clustering
-        while(len(oldClusters)!=len(newClusters)):
+        while (len(oldClusters) != len(newClusters)):
             oldClusters = newClusters
             newClusters = []
             # for each cluster
@@ -329,7 +339,7 @@ class NFAtoDFA(QMainWindow):
                     newClusters.append(oldCluster)
                     continue
                 newClusters.append([oldCluster[0]])
-                
+
                 # for each element in the cluster
                 for element in oldCluster:
                     inCluster = False
@@ -360,7 +370,7 @@ class NFAtoDFA(QMainWindow):
                     # if no cluster is found for the element, create a new cluster
                     if not inCluster:
                         newClusters.append([element])
-            
+
         self.DFA_optimized = nx.DiGraph()
         newNodes = []
         newTransitions = dict()
@@ -402,7 +412,7 @@ class NFAtoDFA(QMainWindow):
             nodeStr = ",".join(nodeList)
             newNodes.append(nodeStr)
             self.DFA_optimized.add_node(nodeStr)
-            
+
             # set initial and final nodes
             if isInitial:
                 self.DFA_optimized.nodes[nodeStr]['initial'] = True
@@ -416,30 +426,32 @@ class NFAtoDFA(QMainWindow):
         # add optimized DFA edges
         for i in newTransitions:
             for j in newTransitions[i]:
-                self.DFA_optimized.add_edge(newNodes[i], newNodes[j], label=",".join(list(newTransitions[i][j])))
+                self.DFA_optimized.add_edge(
+                    newNodes[i], newNodes[j], label=",".join(list(newTransitions[i][j])))
 
-        self.DFA = self.DFA_optimized  
+        self.DFA = self.DFA_optimized
 
     def convert(self):
-        initialFlag=False
-        finalFlag=False
-        if len(nx.nodes(self.NFA))==0:
-            self.errorMessage('Error','Please enter your NFA')
+        initialFlag = False
+        finalFlag = False
+        if len(nx.nodes(self.NFA)) == 0:
+            self.errorMessage('Error', 'Please enter your NFA')
             return
 
         for node in nx.nodes(self.NFA):
             if self.NFA.nodes[node]['initial']:
-                initialFlag=True
+                initialFlag = True
             if self.NFA.nodes[node]['final']:
-                finalFlag=True
+                finalFlag = True
 
         if not initialFlag:
-            self.errorMessage('Error','NFA must have at least one initial state')
+            self.errorMessage(
+                'Error', 'NFA must have at least one initial state')
             return
         if not finalFlag:
-            self.errorMessage('Error','NFA must have at least one final state')
+            self.errorMessage(
+                'Error', 'NFA must have at least one final state')
             return
-
 
         edge_labels = nx.get_edge_attributes(self.NFA, 'label')
 
@@ -471,7 +483,8 @@ class NFAtoDFA(QMainWindow):
         initialNodeSet = {initialNode}
         if 'eps' in alphabet:
             visited = []
-            initialNodeSet = self.addEpsilonTransitions(list(initialNodeSet), visited)
+            initialNodeSet = self.addEpsilonTransitions(
+                list(initialNodeSet), visited)
         initialNodeList = []
         for node in nodePattern:
             if node in initialNodeSet:
@@ -488,7 +501,8 @@ class NFAtoDFA(QMainWindow):
         self.DFA.add_node(initialNodeStr)
 
         # form the DFA transition table
-        self.addTransitionTuple(alphabet, initialNodeList, visited, nodePattern)
+        self.addTransitionTuple(
+            alphabet, initialNodeList, visited, nodePattern)
 
         # mark initial and final nodes
         self.markInitialAndFinal(initialNodeStr)
@@ -510,17 +524,23 @@ class NFAtoDFA(QMainWindow):
         self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
 
-    def errorMessage(self,title,text):
+    def errorMessage(self, title, text):
+        """show error messages during run time
+
+        Args:
+            title (str): the title of the error that will be shown on top of the error message
+            text (str): error description
+        """
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
         msg.setText(text)
         msg.setWindowTitle(title)
         msg.exec_()
 
-    def clearStarFields(self)->None:
+    def clearStarFields(self) -> None:
+        """function used to clear all input fields and set them to empty strings
+        """
         self.star_from_node.setText('')
         self.star_to_node.setText('')
         self.star_transition_edge.setText('')
         self.error_empty_fields.setText('')
-
-
