@@ -51,17 +51,18 @@ graph3.nodes['1']['initial'] = True
 graph3.nodes['9']['final'] = True
 
 graph4 = nx.DiGraph()
-graph4.add_edges_from([('1', '2', {'label': 'eps'}),
-                      ('1', '3', {'label': 'eps'}),
-                      ('1', '4', {'label': 'eps'}),
-                      ('2', '5', {'label': 'a'}),
-                      ('3', '6', {'label': 'b'}),
-                      ('4', '7', {'label': 'a'}),
-                      ('7', '8', {'label': 'b'}),
-                      ('5', '9', {'label': 'eps'}),
-                      ('6', '9', {'label': 'eps'}),
-                      ('8', '9', {'label': 'eps'})
-                       ])
+graph4.add_edges_from([
+    ('1', '2', {'label': 'eps'}),
+    ('1', '3', {'label': 'eps'}),
+    ('1', '4', {'label': 'eps'}),
+    ('2', '5', {'label': 'a'}),
+    ('3', '6', {'label': 'b'}),
+    ('4', '7', {'label': 'a'}),
+    ('7', '8', {'label': 'b'}),
+    ('5', '9', {'label': 'eps'}),
+    ('6', '9', {'label': 'eps'}),
+    ('8', '9', {'label': 'eps'})
+])
 for node in graph4.nodes:
     graph4.nodes[node]['initial'] = False
     graph4.nodes[node]['final'] = False
@@ -69,11 +70,12 @@ graph4.nodes['1']['initial'] = True
 graph4.nodes['9']['final'] = True
 
 graph5 = nx.DiGraph()
-graph5.add_edges_from([('q0', 'q1', {'label': '1'}),
-                       ('q0', 'q2', {'label': 'eps'}),
-                       ('q1', 'q0', {'label': '0'}),
-                       ('q1', 'q2', {'label': '0,1'}),
-                       ])
+graph5.add_edges_from([
+    ('q0', 'q1', {'label': '1'}),
+    ('q0', 'q2', {'label': 'eps'}),
+    ('q1', 'q0', {'label': '0'}),
+    ('q1', 'q2', {'label': '0,1'}),
+])
 for node in graph5.nodes:
     graph5.nodes[node]['initial'] = False
     graph5.nodes[node]['final'] = False
