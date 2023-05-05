@@ -57,9 +57,10 @@ class NFAtoDFA(QMainWindow):
         sceneStack_Manuals.close()
 
     def generateGraph(self):
+        """for easy testing we created ready to use graphs that show by a click of button
+        """
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
-
         graph, graphindex = generateRandom_graph(self.lastRand)
 
         self.NFA = graph
