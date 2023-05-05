@@ -2,3 +2,6 @@ pydot
 graphviz
 pyqt5
 networkx
+matplotlib
+numpy
+opencv-python
