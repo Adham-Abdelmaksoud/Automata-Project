@@ -30,6 +30,7 @@ class CFGtoPDA(QMainWindow):
         self.terminalSymbols_txt.clear()
         self.PDA_viz = gv.Digraph()
         self.CFG_txt.clear()
+        self.visualizePDA_btn.setEnabled(False)
 
     def visualizePDA(self):
         self.PDA_viz.format = 'pdf'
