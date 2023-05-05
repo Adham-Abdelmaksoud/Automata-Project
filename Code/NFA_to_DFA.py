@@ -87,6 +87,12 @@ class NFAtoDFA(QMainWindow):
         self.clearStarFields()
 
     def plot(self, imgName, graph_viz, layout, label):
+        """show the graph inside the Qt window in the gadget
+
+        Args:
+            imgName (str): the name of the image shown
+            graph_viz (graphviz): the graph made using the graphviz
+        """
         self.layout = layout
         self.layout.addWidget(label, alignment=Qt.AlignCenter)
         graph_viz.format = 'png'
@@ -97,6 +103,12 @@ class NFAtoDFA(QMainWindow):
         label.setPixmap(pixmap)
 
     def fromNXtoGV(self, graph, graph_viz):
+        """turn a networkx digraph into a graphviz graph
+
+        Args:
+            graph (Digraph()): network directed graph 
+            graph_viz (graphviz):the graphviz where we will store the new graph
+        """
         labels = nx.get_edge_attributes(graph, 'label')
         isInitialSet = False
         for edge in graph.edges:
@@ -121,11 +133,14 @@ class NFAtoDFA(QMainWindow):
                 graph_viz.edge(edge[0], edge[1], label=labels[edge])
 
     def addEdge(self):
+        """
+        add edges to the current graph
+        """
         emptyField = False
         fromNode = self.fromNodeTxt.text()
         toNode = self.toNodeTxt.text()
         edgeLbl = self.edgeLabelTxt.text()
-
+        # showing a * where an input field is empty
         if fromNode == '':
             emptyField = True
             self.star_from_node.setText('*')
@@ -219,6 +234,8 @@ class NFAtoDFA(QMainWindow):
         else:
             self.NFA.nodes[toNode]['initial'] = False
 
+        # end of checking
+        # show the final result
         self.NFA_viz = gv.Digraph()
         self.NFA_viz.node('', shape='none')
         self.fromNXtoGV(self.NFA, self.NFA_viz)
@@ -246,6 +263,15 @@ class NFAtoDFA(QMainWindow):
                     break
 
     def addEpsilonTransitions(self, nodeList, visited):
+        """add epsilons symbols to edges
+
+        Args:
+            nodeList (List): Node list
+            visited (List): visited nodes list
+
+        Returns:
+            set: _description_
+        """
         nodeSet = set(nodeList)
         for node in nodeList:
             if node not in visited:
