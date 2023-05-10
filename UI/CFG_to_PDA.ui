@@ -6,17 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1170</width>
-    <height>773</height>
+    <width>984</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="font">
    <font>
-    <pointsize>9</pointsize>
+    <pointsize>8</pointsize>
    </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -47,11 +50,22 @@
           <widget class="QLabel" name="terminalSymbols_lbl">
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <family>Gabriola</family>
+             <pointsize>20</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(85, 0, 255);
+font: 20pt &quot;Gabriola&quot;;</string>
            </property>
            <property name="text">
             <string>Terminal Symbols:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -68,11 +82,22 @@
           <widget class="QLabel" name="CFG_lbl">
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <family>Gabriola</family>
+             <pointsize>20</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(85, 0, 255);
+font: 20pt &quot;Gabriola&quot;;</string>
+           </property>
            <property name="text">
-            <string>CFG:</string>
+            <string>Enter Your CFG:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -85,24 +110,35 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0" alignment="Qt::AlignLeft">
-          <widget class="QLabel" name="startSymbol_lbl">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Start Symbol:</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="terminalSymbols_txt">
            <property name="font">
             <font>
              <pointsize>15</pointsize>
             </font>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="startSymbol_lbl">
+           <property name="font">
+            <font>
+             <family>Gabriola</family>
+             <pointsize>20</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(85, 0, 255);
+font: 20pt &quot;Gabriola&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Start Symbol:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -124,7 +160,28 @@
      </widget>
     </item>
     <item>
+     <widget class="Line" name="line">
+      <property name="styleSheet">
+       <string notr="true">border: 2px rgb(85, 0, 255) ; 
+border-style: inset;
+</string>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="frame">
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -136,11 +193,31 @@
         <widget class="QPushButton" name="convert_btn">
          <property name="font">
           <font>
-           <pointsize>13</pointsize>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>14</pointsize>
+           <weight>9</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(85, 0, 255);
+color: rgb(255, 255, 255);
+border-radius: 15px;
+</string>
+         </property>
          <property name="text">
-          <string>Convert To PDA</string>
+          <string>Convert CFG To PDA</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -151,8 +228,18 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>13</pointsize>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>14</pointsize>
+           <weight>9</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(85, 0, 255);
+color: rgb(255, 255, 255);
+border-radius: 15px;</string>
          </property>
          <property name="text">
           <string>Visualize PDA</string>
@@ -166,8 +253,24 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>13</pointsize>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>14</pointsize>
+           <weight>9</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
+         </property>
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
+         <property name="toolTipDuration">
+          <number>-2</number>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(85, 0, 255);
+color: rgb(255, 255, 255);
+border-radius: 15px;</string>
          </property>
          <property name="text">
           <string>Clear</string>
@@ -194,25 +297,44 @@
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QPushButton" name="back_btn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>50</width>
+           <width>150</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>350</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
          <property name="font">
           <font>
-           <pointsize>9</pointsize>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>14</pointsize>
+           <weight>9</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(85, 0, 255);
+color: rgb(255, 255, 255);
+border-radius: 15px;</string>
          </property>
          <property name="text">
           <string>Back</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
          </property>
         </widget>
        </item>
