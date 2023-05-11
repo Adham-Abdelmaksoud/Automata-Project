@@ -164,7 +164,7 @@ class NFAtoDFA(QMainWindow):
             return
 
         if self.toIsInitial.isChecked() and self.fromIsInitial.isChecked():
-            self.errorMessage('Error', 'NFA can have only one initial state')
+            errorMessage('Error', 'NFA can have only one initial state')
             self.clearStarFields()
             return
 
@@ -175,14 +175,14 @@ class NFAtoDFA(QMainWindow):
                 else:
                     for node in nx.nodes(self.NFA):
                         if self.NFA.nodes[node]['initial']:
-                            self.errorMessage(
+                            errorMessage(
                                 'Error', 'NFA can have only one initial state')
                             self.clearStarFields()
                             return
             else:
                 for node in nx.nodes(self.NFA):
                     if self.NFA.nodes[node]['initial']:
-                        self.errorMessage(
+                        errorMessage(
                             'Error', 'NFA can have only one initial state')
                         self.clearStarFields()
                         return
@@ -194,14 +194,14 @@ class NFAtoDFA(QMainWindow):
                 else:
                     for node in nx.nodes(self.NFA):
                         if self.NFA.nodes[node]['initial']:
-                            self.errorMessage(
+                            errorMessage(
                                 'Error', 'NFA can have only one initial state')
                             self.clearStarFields()
                             return
             else:
                 for node in nx.nodes(self.NFA):
                     if self.NFA.nodes[node]['initial']:
-                        self.errorMessage(
+                        errorMessage(
                             'Error', 'NFA can have only one initial state')
                         self.clearStarFields()
                         return
@@ -462,7 +462,7 @@ class NFAtoDFA(QMainWindow):
         initialFlag = False
         finalFlag = False
         if len(nx.nodes(self.NFA)) == 0:
-            self.errorMessage('Error', 'Please enter your NFA')
+            errorMessage('Error', 'Please enter your NFA')
             return
 
         for node in nx.nodes(self.NFA):
@@ -472,11 +472,11 @@ class NFAtoDFA(QMainWindow):
                 finalFlag = True
 
         if not initialFlag:
-            self.errorMessage(
+            errorMessage(
                 'Error', 'NFA must have at least one initial state')
             return
         if not finalFlag:
-            self.errorMessage(
+            errorMessage(
                 'Error', 'NFA must have at least one final state')
             return
 
@@ -550,19 +550,6 @@ class NFAtoDFA(QMainWindow):
         self.optimizeDFA(alphabet, nodePattern)
         self.fromNXtoGV(self.DFA, self.DFA_viz)
         self.plot('DFA', self.DFA_viz, self.DFA_layout, self.DFA_lbl)
-
-    def errorMessage(self, title, text):
-        """show error messages during run time
-
-        Args:
-            title (str): the title of the error that will be shown on top of the error message
-            text (str): error description
-        """
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Critical)
-        msg.setText(text)
-        msg.setWindowTitle(title)
-        msg.exec_()
 
     def clearStarFields(self) -> None:
         """function used to clear all input fields and set them to empty strings

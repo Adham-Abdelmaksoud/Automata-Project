@@ -35,3 +35,17 @@ def aspectResize(path, width, height):
     aspect = w/h
     img = cv2.resize(img, (np.clip(int(aspect*height), 0, width), height))
     plt.imsave(path, img, cmap='gray')
+
+
+def errorMessage(title, text):
+    """show error messages during run time
+
+        Args:
+            title (str): the title of the error that will be shown on top of the error message
+            text (str): error description
+    """
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Critical)
+    msg.setText(text)
+    msg.setWindowTitle(title)
+    msg.exec_()

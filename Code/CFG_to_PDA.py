@@ -22,6 +22,7 @@ class CFGtoPDA(QMainWindow):
         self.back_btn.clicked.connect(self.goback)
         self.clear_btn.clicked.connect(self.clear)
         self.visualizePDA_btn.clicked.connect(self.visualizePDA)
+        self.visualizePDA_btn.setEnabled(False)
 
 
     def clear(self):
@@ -66,35 +67,48 @@ class CFGtoPDA(QMainWindow):
         self.terminalSymbols = self.terminalSymbols_txt.text().split(',')
         self.CFGrules = self.CFG_txt.toPlainText().split('\n')
 
+        errors=[]
+        if self.startSymbol == '':
+            errors.append('Start Symbol')
+        if self.terminalSymbols_txt.text() == '':
+            errors.append('Terminal Symbols')
+        if self.CFG_txt.toPlainText() == '':
+            errors.append('CFG Rules')
+        if len(errors)>0:
+            msg = ', '.join(errors)
+            errorMessage('Error',f'Please Enter {msg}')
+            return
+
+
+
+
         transitions = []
         transitions.append(
             'δ(q1, ε, ε) = {(q2, $)}'
         )
-        self.PDA_viz.node('',shape='none')
-        self.PDA_viz.node('q1',shape='circle')
-        self.PDA_viz.edge('','q1',constraint='false')
-        self.PDA_viz.node('q2',shape='circle')
-        self.PDA_viz.edge('q1', 'q2',label='ε,ε->$',constraint='false')
 
         transitions.append(
             f'δ(q2, ε, ε) = {{(q3, {self.startSymbol})}}'
         )
-        self.PDA_viz.node('q3', shape='circle')
-        self.PDA_viz.edge('q2', 'q3', label=f'ε,ε->{self.startSymbol}',constraint='false')
-
         stateCounter = 3
 
         for terminal in self.terminalSymbols:
             transitions.append(
                 f'δ(q3, {terminal}, {terminal}) = {{(q3, ε)}}'
             )
-            self.PDA_viz.edge('q3','q3',label=f'{terminal},{terminal}->ε',constraint='false')
+
+
 
         for rule in self.CFGrules:
             if rule == '':
                 continue
             rule = rule.replace(' ', '')
-            start, allProduced = rule.split('->')
+            try:
+                start, allProduced = rule.split('->')
+            except:
+                errorMessage('Error','Please Enter Valid CFG Rules\nCFG Rules Must Contain ->')
+                transitions.clear()
+                return
             for produced in allProduced.split('|'):
                 if produced == 'eps':
                     produced = 'ε'
@@ -106,32 +120,22 @@ class CFGtoPDA(QMainWindow):
                         transitions.append(
                             f'δ(q{stateCounter}, ε, ε) = {{(q3, {char})}}'
                         )
-                        self.PDA_viz.node(f'q{stateCounter}',shape='circle')
-                        self.PDA_viz.edge(f'q{stateCounter}', 'q3', label=f'ε,ε->{char}',constraint='false')
 
                         break
                     if(isFirstChar):
                         transitions.append(
                             f'δ(q3, ε, {start}) = {{(q{stateCounter+1}, {char})}}'
                         )
-                        self.PDA_viz.node(f'q{stateCounter+1}', shape='circle')
-                        self.PDA_viz.edge(f'q3', f'q{stateCounter+1}', label=f'ε,{start}->{char}',constraint='false')
                         isFirstChar = False
                     else:
                         transitions.append(
                             f'δ(q{stateCounter}, ε, ε) = {{(q{stateCounter+1}, {char})}}'
                         )
-                        self.PDA_viz.node(f'q{stateCounter+1}', shape='circle')
-                        self.PDA_viz.edge(f'q{stateCounter}', f'q{stateCounter+1}', label=f'ε,ε->{char}',constraint='false')
-
                     stateCounter += 1
 
         transitions.append(
             f'δ(q3, ε, $) = {{(q{stateCounter+1}, ε)}}'
         )
-        self.PDA_viz.node(f'q{stateCounter+1}', shape='doublecircle')
-        self.PDA_viz.edge(f'q3', f'q{stateCounter + 1}', label='ε,$->ε',constraint='false')
-
 
 
         # GRAPH
@@ -195,7 +199,6 @@ class CFGtoPDA(QMainWindow):
         # | | |
         # GRAPH
 
-        
 
         transitions.sort(key=self.getStateNum)
         transitions = "\n".join(transitions)
