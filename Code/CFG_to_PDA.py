@@ -116,17 +116,24 @@ class CFGtoPDA(QMainWindow):
                 charCounter = 0
                 for char in produced[::-1]:
                     charCounter += 1
+                    if len(produced) == 1:
+                        transitions.append(
+                            f'δ(q3, ε, {start}) = {{(q3, {char})}}'
+                        )
+                        break
+
                     if charCounter == len(produced):
                         transitions.append(
                             f'δ(q{stateCounter}, ε, ε) = {{(q3, {char})}}'
                         )
-
                         break
+
                     if(isFirstChar):
                         transitions.append(
                             f'δ(q3, ε, {start}) = {{(q{stateCounter+1}, {char})}}'
                         )
                         isFirstChar = False
+
                     else:
                         transitions.append(
                             f'δ(q{stateCounter}, ε, ε) = {{(q{stateCounter+1}, {char})}}'
@@ -168,6 +175,16 @@ class CFGtoPDA(QMainWindow):
                 charCounter = 0
                 for char in produced[::-1]:
                     charCounter += 1
+                    if len(produced) == 1:
+                        transitions.append(
+                            f'δ(q3, ε, {start}) = {{(q3, {char})}}'
+                        )
+                        self.PDA_viz.edge(
+                            f'q3',
+                            'q3',
+                            label=f'ε/{start}/{char}'
+                        )
+                        break
                     if charCounter == len(produced):
                         self.PDA_viz.edge(
                             f'q{stateCounter}',
