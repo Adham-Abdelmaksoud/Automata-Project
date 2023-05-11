@@ -372,6 +372,9 @@ border-color: rgb(85, 0, 255);</string>
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="star_transition_edge">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 0, 0);</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -379,6 +382,9 @@ border-color: rgb(85, 0, 255);</string>
                </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="star_to_node">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 0, 0);</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -386,6 +392,9 @@ border-color: rgb(85, 0, 255);</string>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="star_from_node">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 0, 0);</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -489,6 +498,9 @@ border-radius: 15px;</string>
                  <width>16777215</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 0, 0);</string>
                </property>
                <property name="text">
                 <string/>
